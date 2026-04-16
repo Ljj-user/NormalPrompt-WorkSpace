@@ -1,0 +1,265 @@
+一个专门存“出图工作流模板”的 GitHub 仓库，如叫 `diagram-prompts`、`banana-prompts` 或 `visual-workflows`。
+
+## 仓库结构建议
+
+```text
+banana-prompts/
+├─ README.md
+├─ templates/
+│  ├─ universal-diagram-template.md
+│  ├─ sequence-diagram-template.md
+│  ├─ architecture-diagram-template.md
+│  └─ dataflow-diagram-template.md
+└─ examples/
+   └─ freqtrade-sequence-example.md
+```
+
+## `README.md`
+
+```md
+# Banana Prompts
+
+这个仓库用于保存可复用的出图提示词模板，主要工作流为：
+
+1. 向 ChatGPT / Cursor 描述出图需求
+2. 获取结构化的 Banana Prompt
+3. 将 Prompt 粘贴到 Gemini Banana 生图
+4. 按需导入 Canva 做排版和微调
+
+## 通用输入模板
+
+每次提需求时尽量包含以下字段：
+
+- 图类型：系统架构图 / 时序图 / 数据流图 / 网络拓扑图
+- 粒度：部署视图 / 模块视图 / 合并视图
+- 语言：中文 / 英文 / 中英双语
+- 风格：扁平矢量、浅色背景、统一箭头、圆角矩形
+- 关键节点与边：可指定，也可让模型补全
+- 输出约束：少字、清晰、留白、透明背景、SVG优先等
+
+## 标准输出格式
+
+希望模型始终返回两部分：
+
+1. `Banana Prompt`
+2. `节点/箭头清单`
+
+## 使用建议
+
+- 优先要求“文字少、结构清晰、层次分明”
+- 优先要求“SVG 或高分辨率 PNG”
+- 如果是系统图，要求模块分层
+- 如果是时序图，要求 lifeline 明确、消息短标签
+```
+
+## `templates/universal-diagram-template.md`
+
+```md
+# Universal Diagram Template
+
+请根据以下参数生成一段可直接用于 Gemini Banana 的出图 Prompt。
+
+## 参数
+- 图类型：{{diagram_type}}
+- 粒度：{{granularity}}
+- 语言：{{language}}
+- 风格：{{style}}
+- 关键节点与边：{{key_nodes_edges}}
+- 输出约束：{{constraints}}
+- 主题/项目：{{project}}
+
+## 输出要求
+请返回两部分：
+
+### 1. Banana Prompt
+一段可直接复制给 Gemini Banana 的完整提示词。
+
+要求：
+- 明确图的标题
+- 明确参与者/模块/层级
+- 明确箭头关系或时序关系
+- 明确视觉风格
+- 明确输出格式（SVG优先或高分辨率PNG）
+- 用词尽量简洁，避免冗长说明
+
+### 2. 节点/箭头清单
+用简短要点列出：
+- 核心节点
+- 核心连线/箭头
+- 可选元素
+```
+
+## `templates/sequence-diagram-template.md`
+
+```md
+# Sequence Diagram Template
+
+你是图表设计师。请生成一张“系统时序图（Sequence Diagram）”的 Gemini Banana 提示词。
+
+## 输入参数
+- 项目：{{project}}
+- 主题：{{topic}}
+- 粒度：{{granularity}}
+- 语言：{{language}}
+- 风格：{{style}}
+- 输出约束：{{constraints}}
+
+## 生成要求
+请输出一段可直接用于 Gemini Banana 的 Prompt，要求：
+
+- 图类型为时序图
+- 使用中文标签
+- 扁平矢量风格
+- 浅色背景
+- 统一箭头样式
+- 圆角矩形参与者卡片
+- 字少、清晰、留白充足
+- 标题明确
+- 明确 lifeline 参与者从左到右排列
+- 消息标签尽量短
+- 如有必要使用 alt/else 表示模式分支
+
+另外补充一份“节点/箭头清单”。
+```
+
+## `templates/architecture-diagram-template.md`
+
+```md
+# Architecture Diagram Template
+
+你是图表设计师。请生成一张“系统架构图”的 Gemini Banana 提示词。
+
+## 输入参数
+- 项目：{{project}}
+- 主题：{{topic}}
+- 粒度：{{granularity}}
+- 语言：{{language}}
+- 风格：{{style}}
+- 输出约束：{{constraints}}
+
+## 生成要求
+请输出一段可直接用于 Gemini Banana 的 Prompt，要求：
+
+- 图类型为系统架构图
+- 明确分层：入口层 / 核心模块层 / 外部依赖层 / 存储层
+- 模块使用圆角矩形
+- 用统一箭头表示依赖与数据流
+- 中文标签，文字尽量少
+- 浅色背景，留白充足
+- 配色按模块分组
+- 输出 SVG 优先，或高分辨率 PNG
+
+另外补充一份“节点/箭头清单”。
+```
+
+## `templates/dataflow-diagram-template.md`
+
+```md
+# Dataflow Diagram Template
+
+你是图表设计师。请生成一张“数据流图（Data Flow Diagram）”的 Gemini Banana 提示词。
+
+## 输入参数
+- 项目：{{project}}
+- 主题：{{topic}}
+- 粒度：{{granularity}}
+- 语言：{{language}}
+- 风格：{{style}}
+- 输出约束：{{constraints}}
+
+## 生成要求
+请输出一段可直接用于 Gemini Banana 的 Prompt，要求：
+
+- 图类型为数据流图
+- 明确数据来源、处理节点、存储节点、输出节点
+- 箭头重点表现数据方向
+- 标签短，结构清晰
+- 中文为主
+- 扁平矢量风格、浅色背景、圆角矩形、统一箭头
+- 留白充足，避免过密
+
+另外补充一份“节点/箭头清单”。
+```
+
+## `examples/freqtrade-sequence-example.md`
+
+```md
+# Freqtrade 时序图示例
+
+## 输入
+- 图类型：freqtrade时序图
+- 粒度：合并
+- 语言：中文标签
+- 风格：扁平矢量、浅色背景、统一箭头、圆角矩形
+- 关键节点与边：由模型补全
+- 输出约束：尽量少字、字体清晰、留白
+
+## Banana Prompt
+
+你是图表设计师。请生成一张“系统时序图（Sequence Diagram）”，中文标签，扁平矢量风格，浅色背景，圆角矩形参与者卡片，统一箭头样式。整体留白充足，字体清晰可读。不要出现冗长句子；每条消息标签尽量短。导出为矢量风格（SVG优先），或高分辨率PNG。
+
+标题：Freqtrade 系统时序图（合并视图）
+
+参与者从左到右：
+1. 用户/浏览器（WebUI）
+2. REST Webserver
+3. Freqtrade 引擎
+4. 策略 Strategy
+5. 数据/回测模块
+6. Trader
+7. CCXT
+8. SQLite
+
+消息序列：
+A. 用户触发
+B. Webserver 加载配置
+C. 引擎请求数据
+D. 数据模块请求交易所OHLCV
+E. 返回数据
+F. 策略生成信号
+G. 引擎调用 Trader
+H. Trader 执行回测或 dry-run
+I. 结果写入 SQLite
+J. Webserver 返回结果
+K. WebUI 展示
+
+视觉规范：
+- 浅色背景
+- 模块颜色分组
+- 深灰箭头
+- 字少、结构清晰、留白充足
+
+输出只要最终图。
+
+## 节点/箭头清单
+
+节点：
+- WebUI
+- Webserver
+- Freqtrade 引擎
+- Strategy
+- 数据/回测
+- Trader
+- CCXT
+- SQLite
+
+箭头：
+- WebUI -> Webserver
+- Webserver -> 引擎
+- 引擎 -> 数据模块
+- 数据模块 <-> CCXT
+- 数据模块 -> Strategy
+- Strategy -> 引擎
+- 引擎 -> Trader
+- Trader -> SQLite
+- Webserver -> WebUI
+```
+
+## 以后怎么用
+每次开新项目，只要：
+1. 从这个仓库复制一个模板
+2. 填好参数
+3. 发给我让我生成最终 `Banana Prompt`
+4. 或者你自己直接替换变量后扔给 Banana
+
+如果你愿意，我下一条可以直接给你一份更适合放进 GitHub 的“最终版 README”，写得更像公开仓库首页。
